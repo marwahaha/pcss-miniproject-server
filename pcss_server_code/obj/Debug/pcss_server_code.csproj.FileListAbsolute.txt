@@ -1,2 +1,7 @@
 C:\Users\Kika\Desktop\GitFolder\pcss-miniproject-server\pcss_server_code\bin\Debug\pcss_server_code.exe.config
 D:\github\pcss-miniproject-server\pcss_server_code\bin\Debug\pcss_server_code.exe.config
+D:\github\pcss-miniproject-server\pcss_server_code\bin\Debug\pcss_server_code.exe
+D:\github\pcss-miniproject-server\pcss_server_code\bin\Debug\pcss_server_code.pdb
+D:\github\pcss-miniproject-server\pcss_server_code\obj\Debug\pcss_server_code.csprojResolveAssemblyReference.cache
+D:\github\pcss-miniproject-server\pcss_server_code\obj\Debug\pcss_server_code.exe
+D:\github\pcss-miniproject-server\pcss_server_code\obj\Debug\pcss_server_code.pdb
