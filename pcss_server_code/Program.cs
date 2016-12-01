@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net.Sockets;
+using System.Net;
+using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +11,13 @@ namespace pcss_server_code
 {
     class Program
     {
-        static void Main(string[] args)
+        static TcpListener tcpListener = new TcpListener(IPAddress.Loopback, 1234);
+
+        static void Main()
         {
-            //I am a sweaty monkey
+            tcpListener.Start();
+            Console.WriteLine("Starting server...");
+         
         }
     }
 }
