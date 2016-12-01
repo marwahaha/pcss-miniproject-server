@@ -21,7 +21,5 @@ namespace pcss_server_code {
             streamWriter.Close();
             clientSocket.Close();
         }
-
-        //Heya
     }
 }
