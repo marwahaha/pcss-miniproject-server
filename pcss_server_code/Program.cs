@@ -12,6 +12,7 @@ namespace pcss_server_code
     class Program
     {
         static TcpListener tcpListener = new TcpListener(IPAddress.Loopback, 1234);
+        static bool isOnline;
 
         static void Main()
         {
