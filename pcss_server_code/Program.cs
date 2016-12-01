@@ -12,11 +12,12 @@ namespace pcss_server_code
     class Program
     {
         static TcpListener tcpListener = new TcpListener(IPAddress.Loopback, 1234);
+        public int myNumber;
 
         static void Main()
         {
             tcpListener.Start();
-            Console.WriteLine("Starting server...");
+            Console.WriteLine("Starting server... ..");
          
         }
     }
