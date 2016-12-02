@@ -36,16 +36,13 @@ namespace pcss_server_code
                 t.Name = "Player" + i;
                 clientThreads.Add(Thread.CurrentThread);
             }
-
             Console.WriteLine("Client threads created, waiting for players to join...");
-
         }
 
         static void Listener() {
             Socket clientSocket = tcpListener.AcceptSocket();
 
             if (clientSocket.Connected) {
-                Console.WriteLine("Point Reached 1");
                 Player player = new Player(clientSocket);
                 LinkedListNode<Player> playerNode = new LinkedListNode<Player>(player);
                 players.AddLast(playerNode);
@@ -54,12 +51,8 @@ namespace pcss_server_code
                 if (activePlayerNode == null) activePlayerNode = playerNode;
 
                 player.streamWriter.WriteLine("Lobby");
-                //The first player to connect gets a 1, then playNumber increments so the next player gets a 2 and so on
-                Console.WriteLine("Point Reached 2");
                 player.myTurn = playerNumber;
                 player.streamWriter.WriteLine(playerNumber);
-
-                Console.WriteLine("Point Reached 3");
 
                 for (int i = 0; i < updatingPlayers.Count; i++) {
                     updatingPlayers[i].streamWriter.WriteLine("update");
@@ -67,8 +60,6 @@ namespace pcss_server_code
                     updatingPlayers[i].streamWriter.WriteLine("Player " + playerNumber + "/3 connected. " + "Awaiting for " + temp + " player(s) to connect");
                 }
                 playerNumber++;
-
-
 
                 // Wait for other players to connect/join
                 while (players.Count != 3)
@@ -97,9 +88,7 @@ namespace pcss_server_code
             else if (guess == 1000)
             {
                 activePlayerNode.Value.streamWriter.WriteLine("change");
-                Console.WriteLine("Waiting reponds");
                 activePlayerNode.Value.secretNumber = Int32.Parse(activePlayerNode.Value.streamReader.ReadLine());
-                Console.WriteLine("skipped responds");
             }
 
             else
@@ -127,9 +116,7 @@ namespace pcss_server_code
             else if (guess == 1000)
             {
                 activePlayerNode.Value.streamWriter.WriteLine("change");
-                Console.WriteLine("Waiting reponds");
                 activePlayerNode.Value.secretNumber = Int32.Parse(activePlayerNode.Value.streamReader.ReadLine());
-                Console.WriteLine("skipped responds");
             }
 
             else {
