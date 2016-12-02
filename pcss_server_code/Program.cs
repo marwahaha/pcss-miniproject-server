@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace pcss_server_code
 {
-    class Program
+    public class GameServer
     {
         static TcpListener tcpListener = new TcpListener(IPAddress.Any, 1234);
         static List<Thread> clientThreads = new List<Thread>();
@@ -79,6 +79,36 @@ namespace pcss_server_code
 
             Console.WriteLine("Clients disconnected! : Press any key to shut down server...");
             Console.ReadKey();
+        }
+
+        static void GuessNext()
+        {
+            activePlayerNode.Value.streamWriter.WriteLine("Now guess!");
+            guess = Int32.Parse(activePlayerNode.Value.streamReader.ReadLine());
+
+            if (nextNode.Value.secretNumber == guess)
+            {
+                activePlayerNode.Value.streamWriter.WriteLine("It's a hit!");
+                nextNode.Value.streamWriter.WriteLine("Game Over");
+                nextNode.Value.Disconnect();
+                players.Remove(nextNode);
+            }
+
+            else if (guess == 1000)
+            {
+                activePlayerNode.Value.streamWriter.WriteLine("change");
+                Console.WriteLine("Waiting reponds");
+                activePlayerNode.Value.secretNumber = Int32.Parse(activePlayerNode.Value.streamReader.ReadLine());
+                Console.WriteLine("skipped responds");
+            }
+
+            else
+            {
+                if (nextNode.Value.secretNumber > guess)
+                    activePlayerNode.Value.streamWriter.WriteLine("You missed. Try aiming higher next time. Wait for your turn.");
+                else
+                    activePlayerNode.Value.streamWriter.WriteLine("You missed. Try aiming lower next time. Wait for your turn.");
+            }
         }
     }
 }

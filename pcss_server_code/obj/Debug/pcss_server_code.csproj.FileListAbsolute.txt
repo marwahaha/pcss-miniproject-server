@@ -11,3 +11,6 @@ D:\github\pcss-miniproject-server\pcss_server_code\obj\Debug\pcss_server_code.pd
 >>>>>>> 23cdb3a6426d07dedc07c731074a69c43fb5442d
 C:\Users\Gintare\AppData\Local\GitHub\pcss-miniproject-server\pcss_server_code\obj\Debug\pcss_server_code.exe
 C:\Users\Gintare\AppData\Local\GitHub\pcss-miniproject-server\pcss_server_code\obj\Debug\pcss_server_code.pdb
+C:\github project\pcss-miniproject-server\pcss_server_code\bin\Debug\pcss_server_code.exe.config
+C:\github project\pcss-miniproject-server\pcss_server_code\obj\Debug\pcss_server_code.exe
+C:\github project\pcss-miniproject-server\pcss_server_code\obj\Debug\pcss_server_code.pdb

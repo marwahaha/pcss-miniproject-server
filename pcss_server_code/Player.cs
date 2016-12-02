@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HandIn_Multithreading_Server2
+namespace pcss_server_code
 {
     class Player
     {
