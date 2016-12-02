@@ -11,11 +11,17 @@ namespace pcss_server_code
 {
     class Program
     {
-        static TcpListener tcpListener = new TcpListener(IPAddress.Loopback, 1234);
+        static TcpListener tcpListener = new TcpListener(IPAddress.Any, 1234);
         static List<Thread> clientThreads = new List<Thread>();
-       // static LinkedList<Player> players = new LinkedList<Player>();
-       // static LinkedListNode<Player> activePlayerNode;
-
+        static LinkedList<Player> players = new LinkedList<Player>();
+        static List<Player> updatingPlayers = new List<Player>();
+        static LinkedListNode<Player> activePlayerNode;
+        static int playerNumber = 1;
+        static int temp = 0;
+        static int guess;
+        static string target;
+        static LinkedListNode<Player> nextNode;
+        static LinkedListNode<Player> prevNode;
 
         public static void Main()
         {
@@ -39,21 +45,36 @@ namespace pcss_server_code
             Socket clientSocket = tcpListener.AcceptSocket();
 
             if (clientSocket.Connected) {
+                Console.WriteLine("Point Reached 1");
                 Player player = new Player(clientSocket);
                 LinkedListNode<Player> playerNode = new LinkedListNode<Player>(player);
                 players.AddLast(playerNode);
+                updatingPlayers.Add(player);
 
                 if (activePlayerNode == null) activePlayerNode = playerNode;
 
+                player.streamWriter.WriteLine("Lobby");
                 //The first player to connect gets a 1, then playNumber increments so the next player gets a 2 and so on
+                Console.WriteLine("Point Reached 2");
                 player.myTurn = playerNumber;
+                player.streamWriter.WriteLine(playerNumber);
+
+                Console.WriteLine("Point Reached 3");
+
+                for (int i = 0; i < updatingPlayers.Count; i++) {
+                    updatingPlayers[i].streamWriter.WriteLine("update");
+                    temp = 3 - playerNumber;
+                    updatingPlayers[i].streamWriter.WriteLine("Player " + playerNumber + "/3 connected. " + "Awaiting for " + temp + " player(s) to connect");
+                }
                 playerNumber++;
 
+
+
                 // Wait for other players to connect/join
-                while (players.Count != 3) {
-                    activePlayerNode.Value.streamWriter.WriteLine("{0} out of 3 player(s) are connected", players.Count);
+                while (players.Count != 3)
                     continue;
-                }
+
+                player.streamWriter.WriteLine("Game Started");
             }
 
             Console.WriteLine("Clients disconnected! : Press any key to shut down server...");
