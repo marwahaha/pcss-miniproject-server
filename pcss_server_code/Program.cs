@@ -13,15 +13,18 @@ namespace pcss_server_code
     {
         static TcpListener tcpListener = new TcpListener(IPAddress.Loopback, 1234);
         static List<Thread> clientThreads = new List<Thread>();
-        static LinkedList<Player> players = new LinkedList<Player>();
-        static LinkedListNode<Player> activePlayerNode;
+       // static LinkedList<Player> players = new LinkedList<Player>();
+       // static LinkedListNode<Player> activePlayerNode;
 
 
-        public static void Main() {
+        public static void Main()
+        {
             tcpListener.Start();
             Console.WriteLine("Starting server...");
 
-            for (int i = 0; i < 3; i++) {
+            //Loop for creating 3 threads for 3 players
+            for (int i = 0; i < 3; i++)
+            {
                 Thread t = new Thread(new ThreadStart(Listener));
                 t.Start();
                 t.Name = "Player" + i;
@@ -32,8 +35,9 @@ namespace pcss_server_code
 
         }
 
-        static void Listener() {
-
+        static void Listener()
+        {
+            Socket clientSocket = tcpListener.AcceptSocket();
         }
     }
 }
