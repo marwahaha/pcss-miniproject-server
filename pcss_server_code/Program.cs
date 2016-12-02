@@ -35,9 +35,29 @@ namespace pcss_server_code
 
         }
 
-        static void Listener()
-        {
+        static void Listener() {
             Socket clientSocket = tcpListener.AcceptSocket();
+
+            if (clientSocket.Connected) {
+                Player player = new Player(clientSocket);
+                LinkedListNode<Player> playerNode = new LinkedListNode<Player>(player);
+                players.AddLast(playerNode);
+
+                if (activePlayerNode == null) activePlayerNode = playerNode;
+
+                //The first player to connect gets a 1, then playNumber increments so the next player gets a 2 and so on
+                player.myTurn = playerNumber;
+                playerNumber++;
+
+                // Wait for other players to connect/join
+                while (players.Count != 3) {
+                    activePlayerNode.Value.streamWriter.WriteLine("{0} out of 3 player(s) are connected", players.Count);
+                    continue;
+                }
+            }
+
+            Console.WriteLine("Clients disconnected! : Press any key to shut down server...");
+            Console.ReadKey();
         }
     }
 }
