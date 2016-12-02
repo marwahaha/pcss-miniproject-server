@@ -110,5 +110,34 @@ namespace pcss_server_code
                     activePlayerNode.Value.streamWriter.WriteLine("You missed. Try aiming lower next time. Wait for your turn.");
             }
         }
+
+        static void GuessPrevious()
+        {
+            activePlayerNode.Value.streamWriter.WriteLine("Now guess!");
+            guess = Int32.Parse(activePlayerNode.Value.streamReader.ReadLine());
+
+            if (prevNode.Value.secretNumber == guess)
+            {
+                activePlayerNode.Value.streamWriter.WriteLine("It's a hit!");
+                prevNode.Value.streamWriter.WriteLine("Game Over");
+                prevNode.Value.Disconnect();
+                players.Remove(prevNode);
+            }
+
+            else if (guess == 1000)
+            {
+                activePlayerNode.Value.streamWriter.WriteLine("change");
+                Console.WriteLine("Waiting reponds");
+                activePlayerNode.Value.secretNumber = Int32.Parse(activePlayerNode.Value.streamReader.ReadLine());
+                Console.WriteLine("skipped responds");
+            }
+
+            else {
+                if (prevNode.Value.secretNumber > guess)
+                    activePlayerNode.Value.streamWriter.WriteLine("You missed. Try aiming higher next time. Wait for your turn.");
+                else
+                    activePlayerNode.Value.streamWriter.WriteLine("You missed. Try aiming lower next time. Wait for your turn.");
+            }
+        }
     }
 }
