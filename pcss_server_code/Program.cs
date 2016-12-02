@@ -2,15 +2,12 @@
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
-namespace pcss_server_code
-{
-    public class GameServer
-    {
+namespace pcss_server_code {
+    public class GameServer {
         static TcpListener tcpListener = new TcpListener(IPAddress.Any, 1234);
         static List<Thread> clientThreads = new List<Thread>();
         static LinkedList<Player> players = new LinkedList<Player>();
@@ -23,14 +20,11 @@ namespace pcss_server_code
         static LinkedListNode<Player> nextNode;
         static LinkedListNode<Player> prevNode;
 
-        public static void Main()
-        {
+        public static void Main() {
             tcpListener.Start();
             Console.WriteLine("Starting server...");
 
-            //Loop for creating 3 threads for 3 players
-            for (int i = 0; i < 3; i++)
-            {
+            for (int i = 0; i < 3; i++) {
                 Thread t = new Thread(new ThreadStart(Listener));
                 t.Start();
                 t.Name = "Player" + i;
@@ -41,12 +35,10 @@ namespace pcss_server_code
 
         }
 
-        static void Listener()
-        {
+        static void Listener() {
             Socket clientSocket = tcpListener.AcceptSocket();
 
-            if (clientSocket.Connected)
-            {
+            if (clientSocket.Connected) {
                 Console.WriteLine("Point Reached 1");
                 Player player = new Player(clientSocket);
                 LinkedListNode<Player> playerNode = new LinkedListNode<Player>(player);
@@ -63,8 +55,7 @@ namespace pcss_server_code
 
                 Console.WriteLine("Point Reached 3");
 
-                for (int i = 0; i < updatingPlayers.Count; i++)
-                {
+                for (int i = 0; i < updatingPlayers.Count; i++) {
                     updatingPlayers[i].streamWriter.WriteLine("update");
                     temp = 3 - playerNumber;
                     updatingPlayers[i].streamWriter.WriteLine("Player " + playerNumber + "/3 connected. " + "Awaiting for " + temp + " player(s) to connect");
@@ -79,10 +70,11 @@ namespace pcss_server_code
 
                 player.streamWriter.WriteLine("Game Started");
 
-                while (players.Count > 1)
-                {
-                    if (activePlayerNode.Value == player)
-                    {
+
+                while (players.Count > 1) {
+
+
+                    if (activePlayerNode.Value == player) {
 
                         if (activePlayerNode.Next != null)
                             nextNode = activePlayerNode.Next;
@@ -95,8 +87,7 @@ namespace pcss_server_code
                             prevNode = players.Last;
 
                         //On the players first turn, write which number player they are
-                        if (activePlayerNode.Value.flag)
-                        {
+                        if (activePlayerNode.Value.flag) {
                             activePlayerNode.Value.streamWriter.WriteLine("You are player number {0} out of {1}, and your secret number is {2}", activePlayerNode.Value.myTurn, players.Count, activePlayerNode.Value.secretNumber);
                             activePlayerNode.Value.flag = false;
                         }
@@ -104,12 +95,10 @@ namespace pcss_server_code
                         activePlayerNode.Value.streamWriter.WriteLine("It's your turn!");
                         target = activePlayerNode.Value.streamReader.ReadLine();
 
-                        if (target == "next")
-                        {
+                        if (target == "next") {
                             GuessNext();
                         }
-                        if (target == "previous")
-                        {
+                        if (target == "previous") {
                             GuessPrevious();
                         }
 
@@ -119,35 +108,32 @@ namespace pcss_server_code
                             activePlayerNode = players.First;
                     }
                 }
+
             }
 
             Console.WriteLine("Clients disconnected! : Press any key to shut down server...");
             Console.ReadKey();
         }
 
-        static void GuessNext()
-        {
+        static void GuessNext() {
             activePlayerNode.Value.streamWriter.WriteLine("Now guess!");
             guess = Int32.Parse(activePlayerNode.Value.streamReader.ReadLine());
 
-            if (nextNode.Value.secretNumber == guess)
-            {
+            if (nextNode.Value.secretNumber == guess) {
                 activePlayerNode.Value.streamWriter.WriteLine("It's a hit!");
                 nextNode.Value.streamWriter.WriteLine("Game Over");
                 nextNode.Value.Disconnect();
                 players.Remove(nextNode);
             }
 
-            else if (guess == 1000)
-            {
+            else if (guess == 1000) {
                 activePlayerNode.Value.streamWriter.WriteLine("change");
                 Console.WriteLine("Waiting reponds");
                 activePlayerNode.Value.secretNumber = Int32.Parse(activePlayerNode.Value.streamReader.ReadLine());
                 Console.WriteLine("skipped responds");
             }
 
-            else
-            {
+            else {
                 if (nextNode.Value.secretNumber > guess)
                     activePlayerNode.Value.streamWriter.WriteLine("You missed. Try aiming higher next time. Wait for your turn.");
                 else
@@ -155,29 +141,25 @@ namespace pcss_server_code
             }
         }
 
-        static void GuessPrevious()
-        {
+        static void GuessPrevious() {
             activePlayerNode.Value.streamWriter.WriteLine("Now guess!");
             guess = Int32.Parse(activePlayerNode.Value.streamReader.ReadLine());
 
-            if (prevNode.Value.secretNumber == guess)
-            {
+            if (prevNode.Value.secretNumber == guess) {
                 activePlayerNode.Value.streamWriter.WriteLine("It's a hit!");
                 prevNode.Value.streamWriter.WriteLine("Game Over");
                 prevNode.Value.Disconnect();
                 players.Remove(prevNode);
             }
 
-            else if (guess == 1000)
-            {
+            else if (guess == 1000) {
                 activePlayerNode.Value.streamWriter.WriteLine("change");
                 Console.WriteLine("Waiting reponds");
                 activePlayerNode.Value.secretNumber = Int32.Parse(activePlayerNode.Value.streamReader.ReadLine());
                 Console.WriteLine("skipped responds");
             }
 
-            else
-            {
+            else {
                 if (prevNode.Value.secretNumber > guess)
                     activePlayerNode.Value.streamWriter.WriteLine("You missed. Try aiming higher next time. Wait for your turn.");
                 else
