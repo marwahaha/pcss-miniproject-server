@@ -1,2 +1,3 @@
 C:\Users\Kika\Desktop\GitFolder\pcss-miniproject-server\pcss_server_code\bin\Debug\pcss_server_code.exe.config
 D:\github\pcss-miniproject-server\pcss_server_code\bin\Debug\pcss_server_code.exe.config
+C:\Users\Gintare\AppData\Local\GitHub\pcss-miniproject-server\pcss_server_code\bin\Debug\pcss_server_code.exe.config
