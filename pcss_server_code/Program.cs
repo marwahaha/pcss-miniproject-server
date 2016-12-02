@@ -41,10 +41,12 @@ namespace pcss_server_code
 
         }
 
-        static void Listener() {
+        static void Listener()
+        {
             Socket clientSocket = tcpListener.AcceptSocket();
 
-            if (clientSocket.Connected) {
+            if (clientSocket.Connected)
+            {
                 Console.WriteLine("Point Reached 1");
                 Player player = new Player(clientSocket);
                 LinkedListNode<Player> playerNode = new LinkedListNode<Player>(player);
@@ -61,7 +63,8 @@ namespace pcss_server_code
 
                 Console.WriteLine("Point Reached 3");
 
-                for (int i = 0; i < updatingPlayers.Count; i++) {
+                for (int i = 0; i < updatingPlayers.Count; i++)
+                {
                     updatingPlayers[i].streamWriter.WriteLine("update");
                     temp = 3 - playerNumber;
                     updatingPlayers[i].streamWriter.WriteLine("Player " + playerNumber + "/3 connected. " + "Awaiting for " + temp + " player(s) to connect");
@@ -75,6 +78,47 @@ namespace pcss_server_code
                     continue;
 
                 player.streamWriter.WriteLine("Game Started");
+
+                while (players.Count > 1)
+                {
+                    if (activePlayerNode.Value == player)
+                    {
+
+                        if (activePlayerNode.Next != null)
+                            nextNode = activePlayerNode.Next;
+                        else
+                            nextNode = players.First;
+
+                        if (activePlayerNode.Previous != null)
+                            prevNode = activePlayerNode.Previous;
+                        else
+                            prevNode = players.Last;
+
+                        //On the players first turn, write which number player they are
+                        if (activePlayerNode.Value.flag)
+                        {
+                            activePlayerNode.Value.streamWriter.WriteLine("You are player number {0} out of {1}, and your secret number is {2}", activePlayerNode.Value.myTurn, players.Count, activePlayerNode.Value.secretNumber);
+                            activePlayerNode.Value.flag = false;
+                        }
+
+                        activePlayerNode.Value.streamWriter.WriteLine("It's your turn!");
+                        target = activePlayerNode.Value.streamReader.ReadLine();
+
+                        if (target == "next")
+                        {
+                            GuessNext();
+                        }
+                        if (target == "previous")
+                        {
+                            GuessPrevious();
+                        }
+
+                        if (activePlayerNode.Next != null)
+                            activePlayerNode = activePlayerNode.Next;
+                        else
+                            activePlayerNode = players.First;
+                    }
+                }
             }
 
             Console.WriteLine("Clients disconnected! : Press any key to shut down server...");
@@ -132,7 +176,8 @@ namespace pcss_server_code
                 Console.WriteLine("skipped responds");
             }
 
-            else {
+            else
+            {
                 if (prevNode.Value.secretNumber > guess)
                     activePlayerNode.Value.streamWriter.WriteLine("You missed. Try aiming higher next time. Wait for your turn.");
                 else
